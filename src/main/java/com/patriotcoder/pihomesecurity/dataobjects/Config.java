@@ -25,7 +25,7 @@ public class Config
     /**
      * Email addresses to send notifications to.
      */
-    private static String[] emailto;
+    private static String[] emailTo;
 
     /**
      * SMTP server to use for notifications.
@@ -103,17 +103,17 @@ public class Config
      * Email addresses to send notifications to.
      * @return the emailto
      */
-    public static String[] getEmailto()
+    public static String[] getEmailTo()
     {
-        return emailto;
+        return emailTo;
     }
 
     /**
      * Email addresses to send notifications to.
      * @param aEmailto the emailto to set
      */
-    public void setEmailto(String[] aEmailto)
+    public void setEmailTo(String[] aEmailto)
     {
-        emailto = aEmailto;
+        emailTo = aEmailto;
     }
 }

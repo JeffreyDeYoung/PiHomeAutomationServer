@@ -3,6 +3,7 @@ package com.patriotcoder.pihomesecurity.threads;
 import com.patriotcoder.pihomesecurity.dataobjects.Pi;
 import com.patriotcoder.pihomesecurity.notifiers.Notifier;
 import com.patriotcoder.pihomesecurity.threads.abs.CheckerThread;
+import com.patriotcoder.pihomesecurity.utils.PiHomeSecUtils;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -24,13 +25,13 @@ public class PiCheckThread extends CheckerThread
 
     private InetAddress inet = null;
 
-    private Notifier notifier;
+    private Notifier[] notifiers;
 
-    public PiCheckThread(Pi pi, Notifier notifier)
+    public PiCheckThread(Pi pi, Notifier[] notifiers)
     {
         super(5000, 3);
         this.pi = pi;
-        this.notifier = notifier;
+        this.notifiers = notifiers;
         try
         {
             inet = InetAddress.getByName(pi.getIp());
@@ -59,7 +60,7 @@ public class PiCheckThread extends CheckerThread
     {
         String message = "Could not connect to pi: " + pi.toString();
         logger.info(message);
-        notifier.doNotify(message);
+        PiHomeSecUtils.doBulkNotify(notifiers, message);
     }
 
     @Override
@@ -67,7 +68,7 @@ public class PiCheckThread extends CheckerThread
     {
         String message = "Connection restored to pi: " + pi.toString();
         logger.info(message);
-        notifier.doNotify(message);
+        PiHomeSecUtils.doBulkNotify(notifiers, message);
     }
 
     @Override

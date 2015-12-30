@@ -95,9 +95,13 @@ public class Main
             System.exit(-1);
         }
 
-        Notifier n = new EmailNotifier("Jeffrey.j.deyoung@gmail.com", "PiHomeSec", Config.getSmtpServer(), Config.getSmtpPort(), Config.getSmtpUser(), Config.getSmtpPassword());
+        Notifier[] notifiers = new Notifier[Config.getEmailTo().length];
+        for(int i = 0; i < notifiers.length; i++){
+            notifiers[i] = new EmailNotifier(Config.getEmailTo()[i], "PiHomeSec", Config.getSmtpServer(), Config.getSmtpPort(), Config.getSmtpUser(), Config.getSmtpPassword());
+        }
+
         //n.doNotify("This is a test message.");
-        Thread checkerThread = new PiCheckThread(new Pi("10.0.0.20", "First Pi"), n);
+        Thread checkerThread = new PiCheckThread(new Pi("10.0.0.20", "First Pi"), notifiers);
         checkerThread.start();
     }
 
