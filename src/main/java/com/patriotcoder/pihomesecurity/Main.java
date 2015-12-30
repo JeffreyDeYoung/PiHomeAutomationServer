@@ -143,7 +143,7 @@ public class Main
                 i++;
             }
         }
-
+        config.setEmailTo(emailTo.toArray(new String[emailTo.size()]));
         return config;
 
     }

@@ -72,7 +72,7 @@ public class EmailNotifier implements Notifier
         //prepend date for easy viewing.
         text = "[" + new Date().toString() + "] " + text;
 
-        logger.debug("Sending email: " + text);
+        logger.debug("Sending email to: " + to + " with body: " + text);
 
         // Get the default Session object.
         Session session = Session.getInstance(properties, new javax.mail.Authenticator()
