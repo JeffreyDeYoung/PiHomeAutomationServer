@@ -2,7 +2,9 @@ package com.patriotcoder.pihomesecurity;
 
 import com.docussandra.javasdk.Config;
 import com.docussandra.javasdk.dao.DatabaseDao;
+import com.docussandra.javasdk.dao.TableDao;
 import com.docussandra.javasdk.dao.impl.DatabaseDaoImpl;
+import com.docussandra.javasdk.dao.impl.TableDaoImpl;
 import com.docussandra.javasdk.exceptions.RESTException;
 import com.patriotcoder.pihomesecurity.dataobjects.PiHomeConfig;
 import com.patriotcoder.pihomesecurity.dataobjects.Pi;
@@ -12,6 +14,7 @@ import com.patriotcoder.pihomesecurity.threads.PiCheckThread;
 import com.patriotcoder.pihomesecurity.utils.PiHomeSecUtils;
 import com.strategicgains.docussandra.domain.objects.Database;
 import com.strategicgains.docussandra.domain.objects.Identifier;
+import com.strategicgains.docussandra.domain.objects.Table;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -114,24 +117,44 @@ public class Main
             setUpDocussandra();
         } catch (RESTException | ParseException | IOException e)
         {
-            String errorMessage = "Problem connecting to or parsing response from Docussandra. Cannot start Pi Home Automation server application.";
+            String errorMessage = "Problem connecting to or parsing response from Docussandra. Cannot start Pi Home Automation server application without this database access.";
             logger.error(errorMessage, e);
             PiHomeSecUtils.doBulkNotify(notifiers, errorMessage);
+            System.err.println(errorMessage);
+            System.exit(-1);
         }
 
         Thread checkerThread = new PiCheckThread(new Pi("10.0.0.20", "First Pi"), notifiers);
         checkerThread.start();
     }
 
+    /**
+     * Sets up Docussandra to be ready to accept data from this application.
+     *
+     * @throws RESTException If we can't connect to Docussandra.
+     * @throws ParseException If we can't process the responses from
+     * Docussandra. (Unlikely.)
+     * @throws IOException If there is an IO problem connecting to Docussandra.
+     */
     private void setUpDocussandra() throws RESTException, ParseException, IOException
     {
         //set up docussandra database (if not already established)
-        DatabaseDao dbDao = new DatabaseDaoImpl(new Config(PiHomeConfig.getDocussandraUrl()));
-        if (!dbDao.exists(new Identifier(Constants.DB)))
+        Config docussandraConfig = new Config(PiHomeConfig.getDocussandraUrl());
+        DatabaseDao dbDao = new DatabaseDaoImpl(docussandraConfig);
+        Database db = new Database(Constants.DB);
+        db.description("This is a database for storing information related to Pi Home Automation.");
+        if (!dbDao.exists(db.getId()))
         {
-            Database db = new Database(Constants.DB);
-            db.description("This is a database for storing information related to Pi Home Automation.");
             dbDao.create(db);
+        }
+        TableDao tbDao = new TableDaoImpl(docussandraConfig);
+        Table sensorNodesTable = new Table();
+        sensorNodesTable.database(db);
+        sensorNodesTable.name(Constants.SENSOR_NODES_TABLE);
+        sensorNodesTable.description("This table holds information about all of our sensor nodes for the Pi Home Automation Application.");
+        if (!tbDao.exists(db, sensorNodesTable.getId()))
+        {
+            tbDao.create(db, sensorNodesTable);
         }
     }
 
