@@ -4,7 +4,7 @@ package com.patriotcoder.pihomesecurity.dataobjects;
  * Class that represents the applications current configuration.
  * @author jeffrey
  */
-public class Config
+public class PiHomeConfig
 {
     /**
      * SMTP server to use for notifications.
@@ -26,6 +26,11 @@ public class Config
      * Email addresses to send notifications to.
      */
     private static String[] emailTo;
+    
+    /**
+     * The Docussandra baseURL to use
+     */
+    private static String docussandraUrl;
 
     /**
      * SMTP server to use for notifications.
@@ -34,6 +39,24 @@ public class Config
     public static String getSmtpServer()
     {
         return smtpServer;
+    }
+
+    /**
+     * The Docussandra baseURL to use
+     * @return the docussandraUrl
+     */
+    public static String getDocussandraUrl()
+    {
+        return docussandraUrl;
+    }
+
+    /**
+     * The Docussandra baseURL to use
+     * @param aDocussandraUrl the docussandraUrl to set
+     */
+    public void setDocussandraUrl(String aDocussandraUrl)
+    {
+        docussandraUrl = aDocussandraUrl;
     }
 
     /**

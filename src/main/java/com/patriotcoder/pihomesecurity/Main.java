@@ -1,10 +1,17 @@
 package com.patriotcoder.pihomesecurity;
 
-import com.patriotcoder.pihomesecurity.dataobjects.Config;
+import com.docussandra.javasdk.Config;
+import com.docussandra.javasdk.dao.DatabaseDao;
+import com.docussandra.javasdk.dao.impl.DatabaseDaoImpl;
+import com.docussandra.javasdk.exceptions.RESTException;
+import com.patriotcoder.pihomesecurity.dataobjects.PiHomeConfig;
 import com.patriotcoder.pihomesecurity.dataobjects.Pi;
 import com.patriotcoder.pihomesecurity.notifiers.EmailNotifier;
 import com.patriotcoder.pihomesecurity.notifiers.Notifier;
 import com.patriotcoder.pihomesecurity.threads.PiCheckThread;
+import com.patriotcoder.pihomesecurity.utils.PiHomeSecUtils;
+import com.strategicgains.docussandra.domain.objects.Database;
+import com.strategicgains.docussandra.domain.objects.Identifier;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import org.apache.log4j.Logger;
+import org.json.simple.parser.ParseException;
 
 /**
  * Main class.
@@ -84,7 +92,7 @@ public class Main
      */
     public void run()
     {
-        Config config;
+        PiHomeConfig config;
         try
         {
             config = generateConfig(propertiesFile);
@@ -95,14 +103,36 @@ public class Main
             System.exit(-1);
         }
 
-        Notifier[] notifiers = new Notifier[Config.getEmailTo().length];
-        for(int i = 0; i < notifiers.length; i++){
-            notifiers[i] = new EmailNotifier(Config.getEmailTo()[i], "PiHomeSec", Config.getSmtpServer(), Config.getSmtpPort(), Config.getSmtpUser(), Config.getSmtpPassword());
+        Notifier[] notifiers = new Notifier[PiHomeConfig.getEmailTo().length];
+        for (int i = 0; i < notifiers.length; i++)
+        {
+            notifiers[i] = new EmailNotifier(PiHomeConfig.getEmailTo()[i], "PiHomeSec", PiHomeConfig.getSmtpServer(), PiHomeConfig.getSmtpPort(), PiHomeConfig.getSmtpUser(), PiHomeConfig.getSmtpPassword());
         }
 
-        //n.doNotify("This is a test message.");
+        try
+        {
+            setUpDocussandra();
+        } catch (RESTException | ParseException | IOException e)
+        {
+            String errorMessage = "Problem connecting to or parsing response from Docussandra. Cannot start Pi Home Automation server application.";
+            logger.error(errorMessage, e);
+            PiHomeSecUtils.doBulkNotify(notifiers, errorMessage);
+        }
+
         Thread checkerThread = new PiCheckThread(new Pi("10.0.0.20", "First Pi"), notifiers);
         checkerThread.start();
+    }
+
+    private void setUpDocussandra() throws RESTException, ParseException, IOException
+    {
+        //set up docussandra database (if not already established)
+        DatabaseDao dbDao = new DatabaseDaoImpl(new Config(PiHomeConfig.getDocussandraUrl()));
+        if (!dbDao.exists(new Identifier(Constants.DB)))
+        {
+            Database db = new Database(Constants.DB);
+            db.description("This is a database for storing information related to Pi Home Automation.");
+            dbDao.create(db);
+        }
     }
 
     /**
@@ -116,10 +146,10 @@ public class Main
      * @throws IOException If the properties file cannot be read for some
      * reason. This probably shouldn't ever happen due to previous checks.
      */
-    private Config generateConfig(File propertiesFile) throws FileNotFoundException, IOException
+    private PiHomeConfig generateConfig(File propertiesFile) throws FileNotFoundException, IOException
     {
         Properties p = parseProperties(propertiesFile);
-        Config config = new Config();
+        PiHomeConfig config = new PiHomeConfig();
         config.setSmtpServer(p.getProperty("pi.sec.smtp.server"));
         config.setSmtpPort(p.getProperty("pi.sec.smtp.port"));
         config.setSmtpUser(p.getProperty("pi.sec.smtp.user"));
@@ -144,6 +174,7 @@ public class Main
             }
         }
         config.setEmailTo(emailTo.toArray(new String[emailTo.size()]));
+        config.setDocussandraUrl(p.getProperty("pi.sec.docussandra.url"));
         return config;
 
     }
