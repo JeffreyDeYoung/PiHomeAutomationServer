@@ -1,0 +1,8 @@
+Package: pihomesecurity
+Version: [[version]]
+Section: misc
+Priority: optional
+Architecture: all
+Maintainer: Jeffrey DeYoung <Trebuchetguy@hotmail.com>
+Description: PiHomeSecurity Server the central home based server for your security system.
+Distribution: development

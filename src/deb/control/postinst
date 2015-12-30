@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "Post install"
+cd /home/piuser
+jar xvf /opt/pihomesecurityserver/PiHomeSecurity.jar
+stop pisecurityserver
+start pisecurityserver
