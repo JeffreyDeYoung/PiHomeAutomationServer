@@ -181,7 +181,7 @@ public class Main
         //get the email addresses and trim; removing any blanks
         List<String> emailTo = Arrays.asList(p.getProperty("pi.sec.email.to", "").split(","));
         int i = 0;
-        for (Iterator<String> iterator = emailTo.iterator(); iterator.hasNext();)
+        for (Iterator<String> iterator = emailTo.iterator(); iterator.hasNext();)//not positive this is safe
         {
             String email = iterator.next();
             if (email.isEmpty())
