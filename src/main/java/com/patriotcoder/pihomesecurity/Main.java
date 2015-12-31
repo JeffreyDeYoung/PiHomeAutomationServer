@@ -2,8 +2,10 @@ package com.patriotcoder.pihomesecurity;
 
 import com.docussandra.javasdk.Config;
 import com.docussandra.javasdk.dao.DatabaseDao;
+import com.docussandra.javasdk.dao.IndexDao;
 import com.docussandra.javasdk.dao.TableDao;
 import com.docussandra.javasdk.dao.impl.DatabaseDaoImpl;
+import com.docussandra.javasdk.dao.impl.IndexDaoImpl;
 import com.docussandra.javasdk.dao.impl.TableDaoImpl;
 import com.docussandra.javasdk.exceptions.RESTException;
 import com.patriotcoder.pihomesecurity.dataobjects.PiHomeConfig;
@@ -13,13 +15,17 @@ import com.patriotcoder.pihomesecurity.notifiers.Notifier;
 import com.patriotcoder.pihomesecurity.threads.PiCheckThread;
 import com.patriotcoder.pihomesecurity.utils.PiHomeSecUtils;
 import com.strategicgains.docussandra.domain.objects.Database;
+import com.strategicgains.docussandra.domain.objects.FieldDataType;
 import com.strategicgains.docussandra.domain.objects.Identifier;
+import com.strategicgains.docussandra.domain.objects.Index;
+import com.strategicgains.docussandra.domain.objects.IndexField;
 import com.strategicgains.docussandra.domain.objects.Table;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -155,6 +161,15 @@ public class Main
         if (!tbDao.exists(db, sensorNodesTable.getId()))
         {
             tbDao.create(db, sensorNodesTable);
+        }
+        Index namesIndex = new Index(Constants.SENSOR_NODES_TABLE_NAME_INDEX);
+        namesIndex.setTable(db.name(), sensorNodesTable.name());
+        List<IndexField> fields = new ArrayList<>();
+        fields.add(new IndexField("name", FieldDataType.TEXT));
+        namesIndex.setFields(fields);
+        IndexDao indexDao = new IndexDaoImpl(docussandraConfig);
+        if(!indexDao.exists(namesIndex.getId())){
+            indexDao.create(namesIndex);
         }
     }
 
