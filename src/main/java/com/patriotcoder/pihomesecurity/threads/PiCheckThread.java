@@ -10,9 +10,9 @@ import java.net.UnknownHostException;
 import org.apache.log4j.Logger;
 
 /**
- * Thread that constantly checks to confirm that the pi has not gone off line
- * (ie, make sure someone hasn't unplugged it to disable it as a security
- * device.)
+ * Thread that constantly checks (via ping) to confirm that the Pi (or other
+ * mircocomputer) has not gone off line (ie, make sure someone hasn't
+ * unplugged it to disable it as a security device.)
  *
  * @author jeffrey
  */
@@ -24,10 +24,19 @@ public class PiCheckThread extends CheckerThread
      */
     public Logger logger = Logger.getLogger(this.getClass());
 
+    /**
+     * Pi (or other microcomputer) node that we are checking on connectivity with.
+     */
     private Pi pi;
 
+    /**
+     * Ip of the Pi.
+     */
     private InetAddress inet = null;
 
+    /**
+     * Notifiers to notify in the event of a problem.
+     */
     private Notifier[] notifiers;
 
     public PiCheckThread(Pi pi, Notifier[] notifiers)

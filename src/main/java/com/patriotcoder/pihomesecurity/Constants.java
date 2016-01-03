@@ -22,4 +22,10 @@ public class Constants
      * Name of the Docussandra sensor nodes name index.
      */
     public static final String SENSOR_NODES_TABLE_NAME_INDEX = "name";
+
+    /**
+     * Name of the Docussandra sensor nodes index that indicates if a node is
+     * running.
+     */
+    public static final String SENSOR_NODES_TABLE_RUNNING_INDEX = "running";
 }

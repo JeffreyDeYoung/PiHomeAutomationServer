@@ -12,6 +12,7 @@ import com.patriotcoder.pihomesecurity.dataobjects.PiHomeConfig;
 import com.patriotcoder.pihomesecurity.dataobjects.Pi;
 import com.patriotcoder.pihomesecurity.notifiers.EmailNotifier;
 import com.patriotcoder.pihomesecurity.notifiers.Notifier;
+import com.patriotcoder.pihomesecurity.threads.DocussandraCheckThread;
 import com.patriotcoder.pihomesecurity.threads.PiCheckThread;
 import com.patriotcoder.pihomesecurity.utils.PiHomeSecUtils;
 import com.strategicgains.docussandra.domain.objects.Database;
@@ -129,7 +130,10 @@ public class Main
             System.err.println(errorMessage);
             System.exit(-1);
         }
-
+        //keep and eye on our Docussandra connection
+        DocussandraCheckThread docDbCheckThread = new DocussandraCheckThread(PiHomeConfig.getDocussandraUrl(), notifiers);
+        docDbCheckThread.start();
+        
         Thread checkerThread = new PiCheckThread(new Pi("10.0.0.20", "First Pi"), notifiers);
         checkerThread.start();
     }
@@ -158,18 +162,30 @@ public class Main
         sensorNodesTable.database(db);
         sensorNodesTable.name(Constants.SENSOR_NODES_TABLE);
         sensorNodesTable.description("This table holds information about all of our sensor nodes for the Pi Home Automation Application.");
-        if (!tbDao.exists(db, sensorNodesTable.getId()))
+        if (!tbDao.exists(sensorNodesTable.getId()))
         {
-            tbDao.create(db, sensorNodesTable);
+            tbDao.create(sensorNodesTable);
         }
+        
         Index namesIndex = new Index(Constants.SENSOR_NODES_TABLE_NAME_INDEX);
         namesIndex.setTable(db.name(), sensorNodesTable.name());
         List<IndexField> fields = new ArrayList<>();
         fields.add(new IndexField("name", FieldDataType.TEXT));
         namesIndex.setFields(fields);
         IndexDao indexDao = new IndexDaoImpl(docussandraConfig);
-        if(!indexDao.exists(namesIndex.getId())){
+        if (!indexDao.exists(namesIndex.getId()))
+        {
             indexDao.create(namesIndex);
+        }
+
+        Index runningIndex = new Index(Constants.SENSOR_NODES_TABLE_RUNNING_INDEX);
+        runningIndex.setTable(db.name(), sensorNodesTable.name());
+        List<IndexField> fieldsRunning = new ArrayList<>();
+        fieldsRunning.add(new IndexField("running", FieldDataType.BOOLEAN));
+        runningIndex.setFields(fieldsRunning);
+        if (!indexDao.exists(runningIndex.getId()))
+        {
+            indexDao.create(runningIndex);
         }
     }
 
