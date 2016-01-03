@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#python script that registers a node with the pi home automation server so that the server knows that its there
+#python script that registers a node with the pi home automation server so that the server knows that it is there
 #should be called at Pi (or other mini-computer) startup
 #usage: ./nodestartup.py [docussandra-url] [node-name]
 #author: Jeffrey DeYoung
