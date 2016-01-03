@@ -28,7 +28,7 @@ public abstract class CheckerThread extends Thread {
     /**
      * Constructor.
      *
-     * @param retryTime How long between checks.
+     * @param retryTime How long between checks. In milliseconds.
      * @param failuresBeforeTrigger Number of times a check will fail before it
      * triggers.
      */
