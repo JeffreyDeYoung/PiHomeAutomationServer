@@ -20,6 +20,9 @@ public abstract class CheckerThread extends Thread {
      */
     public final long failuresBeforeTrigger;
 
+    /**
+     * Logger for this class.
+     */
     public Logger logger = Logger.getLogger(this.getClass());
 
     /**
