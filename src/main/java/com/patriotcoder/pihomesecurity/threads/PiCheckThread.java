@@ -19,6 +19,9 @@ import org.apache.log4j.Logger;
 public class PiCheckThread extends CheckerThread
 {
 
+    /**
+     * Logger for this class.
+     */
     public Logger logger = Logger.getLogger(this.getClass());
 
     private Pi pi;
