@@ -17,7 +17,6 @@ import com.patriotcoder.pihomesecurity.threads.NodeCheckThread;
 import com.patriotcoder.pihomesecurity.utils.PiHomeSecUtils;
 import com.strategicgains.docussandra.domain.objects.Database;
 import com.strategicgains.docussandra.domain.objects.FieldDataType;
-import com.strategicgains.docussandra.domain.objects.Identifier;
 import com.strategicgains.docussandra.domain.objects.Index;
 import com.strategicgains.docussandra.domain.objects.IndexField;
 import com.strategicgains.docussandra.domain.objects.Table;
@@ -133,7 +132,7 @@ public class Main
         //keep and eye on our Docussandra connection
         DocussandraCheckThread docDbCheckThread = new DocussandraCheckThread(PiHomeConfig.getDocussandraUrl(), notifiers);
         docDbCheckThread.start();
-        
+
         Thread checkerThread = new NodeCheckThread(new SecNode("10.0.0.20", "First Pi"), notifiers);
         checkerThread.start();
     }
@@ -166,7 +165,7 @@ public class Main
         {
             tbDao.create(sensorNodesTable);
         }
-        
+
         Index namesIndex = new Index(Constants.SENSOR_NODES_TABLE_NAME_INDEX);
         namesIndex.setTable(db.name(), sensorNodesTable.name());
         List<IndexField> fields = new ArrayList<>();
