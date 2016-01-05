@@ -1,26 +1,34 @@
 package com.patriotcoder.pihomesecurity.dataobjects;
 
 /**
- * Data object representing a pi node.
+ * Data object representing a pi (or other microcomputer) node.
  *
  * @author jeffrey
  */
-public class Pi {
+public class SecNode {
 
     /**
-     * Ip of the Pi.
+     * Ip of the Pi (or other microcomputer).
      */
     private String ip;
     
     /**
-     * Name (or function) of this pi.
+     * Name (or function) of this pi (or other microcomputer).
      */
     private String name;
 
-    public Pi() {
+    /**
+     * Default constructor.
+     */
+    public SecNode() {
     }
 
-    public Pi(String ip, String name) {
+    /**
+     * Constructor.
+     * @param ip Node ip (or DNS).
+     * @param name Name of this node.
+     */
+    public SecNode(String ip, String name) {
         this.ip = ip;
         this.name = name;
     }
@@ -55,7 +63,7 @@ public class Pi {
 
     @Override
     public String toString() {
-        return "Pi{" + "ip=" + ip + ", name=" + name + '}';
+        return "SecNode{" + "ip=" + ip + ", name=" + name + '}';
     }
 
     

@@ -1,6 +1,6 @@
 package com.patriotcoder.pihomesecurity.threads;
 
-import com.patriotcoder.pihomesecurity.dataobjects.Pi;
+import com.patriotcoder.pihomesecurity.dataobjects.SecNode;
 import com.patriotcoder.pihomesecurity.notifiers.Notifier;
 import com.patriotcoder.pihomesecurity.threads.abs.CheckerThread;
 import com.patriotcoder.pihomesecurity.utils.PiHomeSecUtils;
@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
  *
  * @author jeffrey
  */
-public class PiCheckThread extends CheckerThread
+public class NodeCheckThread extends CheckerThread
 {
 
     /**
@@ -27,7 +27,7 @@ public class PiCheckThread extends CheckerThread
     /**
      * Pi (or other microcomputer) node that we are checking on connectivity with.
      */
-    private Pi pi;
+    private SecNode pi;
 
     /**
      * Ip of the Pi.
@@ -39,7 +39,7 @@ public class PiCheckThread extends CheckerThread
      */
     private Notifier[] notifiers;
 
-    public PiCheckThread(Pi pi, Notifier[] notifiers)
+    public NodeCheckThread(SecNode pi, Notifier[] notifiers)
     {
         super(5000, 3);
         this.pi = pi;

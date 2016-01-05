@@ -9,11 +9,11 @@ import com.docussandra.javasdk.dao.impl.IndexDaoImpl;
 import com.docussandra.javasdk.dao.impl.TableDaoImpl;
 import com.docussandra.javasdk.exceptions.RESTException;
 import com.patriotcoder.pihomesecurity.dataobjects.PiHomeConfig;
-import com.patriotcoder.pihomesecurity.dataobjects.Pi;
+import com.patriotcoder.pihomesecurity.dataobjects.SecNode;
 import com.patriotcoder.pihomesecurity.notifiers.EmailNotifier;
 import com.patriotcoder.pihomesecurity.notifiers.Notifier;
 import com.patriotcoder.pihomesecurity.threads.DocussandraCheckThread;
-import com.patriotcoder.pihomesecurity.threads.PiCheckThread;
+import com.patriotcoder.pihomesecurity.threads.NodeCheckThread;
 import com.patriotcoder.pihomesecurity.utils.PiHomeSecUtils;
 import com.strategicgains.docussandra.domain.objects.Database;
 import com.strategicgains.docussandra.domain.objects.FieldDataType;
@@ -134,7 +134,7 @@ public class Main
         DocussandraCheckThread docDbCheckThread = new DocussandraCheckThread(PiHomeConfig.getDocussandraUrl(), notifiers);
         docDbCheckThread.start();
         
-        Thread checkerThread = new PiCheckThread(new Pi("10.0.0.20", "First Pi"), notifiers);
+        Thread checkerThread = new NodeCheckThread(new SecNode("10.0.0.20", "First Pi"), notifiers);
         checkerThread.start();
     }
 

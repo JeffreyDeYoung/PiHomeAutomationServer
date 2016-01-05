@@ -42,9 +42,15 @@ public class DocussandraCheckThread extends CheckerThread
      */
     private TableDao tableDao;
 
+    /**
+     * Constructor.
+     *
+     * @param docussandraUrl URl for Docussandra.
+     * @param notifiers Notifiers to notify if there is a problem.
+     */
     public DocussandraCheckThread(String docussandraUrl, Notifier[] notifiers)
     {
-        super(5000, 3);
+        super(10000, 3);
         this.docussandraUrl = docussandraUrl;
         this.notifiers = notifiers;
         Config docussandraConfig = new Config(PiHomeConfig.getDocussandraUrl());
