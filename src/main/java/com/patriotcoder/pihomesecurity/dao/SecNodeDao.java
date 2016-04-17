@@ -52,7 +52,7 @@ public class SecNodeDao
         this.documentDao = new DocumentDaoImpl(docussandraConfig);
         this.table = new Table();
         this.table.database(Constants.DB);
-        this.table.name(Constants.SENSOR_NODES_TABLE);
+        this.table.name(Constants.NODES_TABLE);
     }
 
     /**
@@ -151,7 +151,7 @@ public class SecNodeDao
     public SecNodeWithId getNodeByName(String nodeName) throws IOException, IndexParseException, ParseException, RESTException
     {
         Query q = new Query();
-        q.setTable(Constants.SENSOR_NODES_TABLE);
+        q.setTable(Constants.NODES_TABLE);
         q.setWhere("name = '" + nodeName + "'");
         QueryResponseWrapper qrw = queryDao.query(Constants.DB, q);
         if (!qrw.isEmpty())

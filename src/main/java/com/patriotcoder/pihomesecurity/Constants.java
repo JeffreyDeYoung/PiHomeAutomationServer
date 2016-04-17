@@ -14,18 +14,23 @@ public class Constants
     public static final String DB = "pihomeautomation";
 
     /**
-     * Name of the Docussandra sensor nodes table.
+     * Name of the Docussandra nodes table.
      */
-    public static final String SENSOR_NODES_TABLE = "sensor_nodes";
+    public static final String NODES_TABLE = "nodes";
 
     /**
-     * Name of the Docussandra sensor nodes name index.
+     * Name of the Docussandra nodes name index.
      */
-    public static final String SENSOR_NODES_TABLE_NAME_INDEX = "name";
+    public static final String NODES_TABLE_NAME_INDEX = "name";
 
     /**
-     * Name of the Docussandra sensor nodes index that indicates if a node is
-     * running.
+     * Name of the Docussandra nodes index that indicates if a node is running.
      */
-    public static final String SENSOR_NODES_TABLE_RUNNING_INDEX = "running";
+    public static final String NODES_TABLE_RUNNING_INDEX = "running";
+
+    /**
+     * Name of the Docussandra nodes index that indicates the type of node it
+     * is.
+     */
+    public static final String NODE_TYPE_INDEX = "type";
 }

@@ -157,17 +157,17 @@ public class Main
             dbDao.create(db);
         }
         TableDao tbDao = new TableDaoImpl(docussandraConfig);
-        Table sensorNodesTable = new Table();
-        sensorNodesTable.database(db);
-        sensorNodesTable.name(Constants.SENSOR_NODES_TABLE);
-        sensorNodesTable.description("This table holds information about all of our sensor nodes for the Pi Home Automation Application.");
-        if (!tbDao.exists(sensorNodesTable.getId()))
+        Table nodesTable = new Table();
+        nodesTable.database(db);
+        nodesTable.name(Constants.NODES_TABLE);
+        nodesTable.description("This table holds information about all of our nodes for the Pi Home Automation Application.");
+        if (!tbDao.exists(nodesTable.getId()))
         {
-            tbDao.create(sensorNodesTable);
+            tbDao.create(nodesTable);
         }
 
-        Index namesIndex = new Index(Constants.SENSOR_NODES_TABLE_NAME_INDEX);
-        namesIndex.setTable(db.name(), sensorNodesTable.name());
+        Index namesIndex = new Index(Constants.NODES_TABLE_NAME_INDEX);
+        namesIndex.setTable(db.name(), nodesTable.name());
         List<IndexField> fields = new ArrayList<>();
         fields.add(new IndexField("name", FieldDataType.TEXT));
         namesIndex.setFields(fields);
@@ -177,14 +177,25 @@ public class Main
             indexDao.create(namesIndex);
         }
 
-        Index runningIndex = new Index(Constants.SENSOR_NODES_TABLE_RUNNING_INDEX);
-        runningIndex.setTable(db.name(), sensorNodesTable.name());
+        Index runningIndex = new Index(Constants.NODES_TABLE_RUNNING_INDEX);
+        runningIndex.setTable(db.name(), nodesTable.name());
         List<IndexField> fieldsRunning = new ArrayList<>();
         fieldsRunning.add(new IndexField("running", FieldDataType.BOOLEAN));
         runningIndex.setFields(fieldsRunning);
         if (!indexDao.exists(runningIndex.getId()))
         {
             indexDao.create(runningIndex);
+        }
+
+        Index typeIndex = new Index(Constants.NODE_TYPE_INDEX);
+        typeIndex.setTable(db.name(), nodesTable.name());
+        List<IndexField> fieldsType = new ArrayList<>();
+        fieldsType.add(new IndexField("running", FieldDataType.BOOLEAN));
+        fieldsType.add(new IndexField("type", FieldDataType.TEXT));
+        typeIndex.setFields(fieldsType);
+        if (!indexDao.exists(runningIndex.getId()))
+        {
+            indexDao.create(typeIndex);
         }
     }
 

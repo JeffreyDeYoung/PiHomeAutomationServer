@@ -62,7 +62,7 @@ public class DocussandraCheckThread extends CheckerThread
     {
         Table t = new Table();
         t.database(new Database(Constants.DB));
-        t.name(Constants.SENSOR_NODES_TABLE);
+        t.name(Constants.NODES_TABLE);
         try
         {
             return tableDao.exists(t.getId());//we can connect and the table exists or doesn't
