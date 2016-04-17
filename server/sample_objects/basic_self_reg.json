@@ -1,5 +1,6 @@
 {
     "name": "test_node",
     "ip": "127.0.0.1",
-    "running": true
+    "running": true,
+    "type": "sensor"
 }

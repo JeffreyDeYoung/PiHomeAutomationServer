@@ -2,6 +2,7 @@
     "name": "test_actor_node",
     "ip": "127.0.0.1",
     "running": true,
+    "type": "actor",
     "abilities": [
         {
             "name": "ability_name",
