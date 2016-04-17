@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 /**
  * Checks Docussandra to see if any nodes have changed their status.
  *
- * @author jeffrey
+ * @author https://github.com/JeffreyDeYoung
  */
 public class DocussandraCheckThread extends CheckerThread
 {

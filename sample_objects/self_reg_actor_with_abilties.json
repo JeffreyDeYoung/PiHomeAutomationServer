@@ -1,0 +1,17 @@
+{
+    "name": "test_actor_node",
+    "ip": "127.0.0.1",
+    "running": true,
+    "abilities": [
+        {
+            "name": "ability_name",
+            "gpioPin": "01",
+            "default_state" : "HIGH"
+        },
+        {
+            "name": "ability_name2",
+            "gpioPin": "02",
+            "default_state" : "HIGH"
+        }
+    ]
+}

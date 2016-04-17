@@ -2,7 +2,7 @@ package com.patriotcoder.pihomesecurity.dataobjects;
 
 /**
  * Class that represents the applications current configuration.
- * @author jeffrey
+ * @author https://github.com/JeffreyDeYoung
  */
 public class PiHomeConfig
 {

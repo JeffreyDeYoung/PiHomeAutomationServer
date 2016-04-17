@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
  * mircocomputer) has not gone off line (ie, make sure someone hasn't
  * unplugged it to disable it as a security device.)
  *
- * @author jeffrey
+ * @author https://github.com/JeffreyDeYoung
  */
 public class NodeCheckThread extends CheckerThread
 {

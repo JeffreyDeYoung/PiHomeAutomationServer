@@ -4,7 +4,7 @@ import com.patriotcoder.pihomesecurity.notifiers.Notifier;
 
 /**
  * Utility class for this application.
- * @author jeffrey
+ * @author https://github.com/JeffreyDeYoung
  */
 public class PiHomeSecUtils
 {

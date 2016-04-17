@@ -3,10 +3,10 @@ package com.patriotcoder.pihomesecurity.dataobjects;
 /**
  * Data object representing a pi (or other microcomputer) node.
  *
- * @author jeffrey
+ * @author https://github.com/JeffreyDeYoung
  */
 public class SecNode {
-
+   
     /**
      * Ip of the Pi (or other microcomputer).
      */

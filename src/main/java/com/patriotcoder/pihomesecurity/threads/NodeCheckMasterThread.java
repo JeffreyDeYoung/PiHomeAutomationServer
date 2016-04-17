@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
  * gone off line (ie, make sure someone hasn't unplugged one/all of them to
  * disable them as a security device.)
  *
- * @author jeffrey
+ * @author https://github.com/JeffreyDeYoung
  */
 public class NodeCheckMasterThread extends CheckerThread
 {

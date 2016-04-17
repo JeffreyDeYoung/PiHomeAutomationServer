@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
  * Abstract Thread that checks the state of a child class and triggers an action
  * if needed.
  *
- * @author jeffrey
+ * @author https://github.com/JeffreyDeYoung
  */
 public abstract class CheckerThread extends Thread {
 

@@ -3,7 +3,7 @@ package com.patriotcoder.pihomesecurity;
 /**
  * Constants for this application.
  *
- * @author jeffrey
+ * @author https://github.com/JeffreyDeYoung
  */
 public class Constants
 {

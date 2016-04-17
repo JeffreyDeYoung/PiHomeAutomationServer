@@ -2,7 +2,7 @@ package com.patriotcoder.pihomesecurity.notifiers;
 
 /**
  * Notifier interface.
- * @author jeffrey
+ * @author https://github.com/JeffreyDeYoung
  */
 public interface Notifier {
     

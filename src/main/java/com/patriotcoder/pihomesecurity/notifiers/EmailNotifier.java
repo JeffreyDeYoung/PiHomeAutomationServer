@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 /**
  * Notifier that notifies via email.
  *
- * @author jeffrey
+ * @author https://github.com/JeffreyDeYoung
  */
 public class EmailNotifier implements Notifier
 {
