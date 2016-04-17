@@ -6,12 +6,12 @@
     "abilities": [
         {
             "name": "ability_name",
-            "gpioPin": "01",
+            "gpio_pin": "01",
             "default_state" : "HIGH"
         },
         {
             "name": "ability_name2",
-            "gpioPin": "02",
+            "gpio_pin": "02",
             "default_state" : "HIGH"
         }
     ]
