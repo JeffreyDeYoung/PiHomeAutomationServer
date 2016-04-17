@@ -2,3 +2,5 @@
 nbactions.xml
 /config
 *~
+/server/config
+/server/target/
