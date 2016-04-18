@@ -4,3 +4,4 @@ nbactions.xml
 *~
 /server/config
 /server/target/
+plugin-jar/target/
