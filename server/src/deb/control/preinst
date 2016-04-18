@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Preinstall"
-useradd piuser
+adduser piuser
 mkdir /opt/pihomesecurityserver
 chown piuser:piuser /opt/pihomesecurityserver
 touch /var/log/pihomesecurityserver.log
