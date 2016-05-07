@@ -19,6 +19,16 @@ public class Constants
     public static final String NODES_TABLE = "nodes";
 
     /**
+     * Name of the Actor Ability Status table.
+     */
+    public static final String ACTOR_ABILITY_STATUS_TABLE = "actor_ability_status";
+
+    /**
+     * Name of the Docussandra actor ability name index.
+     */
+    public static final String ACTOR_ABILITY_STATUS_NAME_INDEX = "name";
+
+    /**
      * Name of the Docussandra nodes name index.
      */
     public static final String NODES_TABLE_NAME_INDEX = "name";

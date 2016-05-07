@@ -130,7 +130,6 @@ public class Main
         //keep and eye on our Docussandra connection
         //DocussandraCheckThread docDbCheckThread = new DocussandraCheckThread(PiHomeConfig.getDocussandraUrl(), notifiers);
         //docDbCheckThread.start();
-
         Thread checkerThread = new NodeCheckThread(new SecNode("10.0.0.20", "First Pi"), notifiers);
         checkerThread.start();
     }
@@ -194,6 +193,25 @@ public class Main
         if (!indexDao.exists(runningIndex.getId()))
         {
             indexDao.create(typeIndex);
+        }
+
+        Table aaStatus = new Table();
+        aaStatus.database(db);
+        aaStatus.name(Constants.ACTOR_ABILITY_STATUS_TABLE);
+        aaStatus.description("This table holds information about all of our actor abilities current status.");
+        if (!tbDao.exists(aaStatus.getId()))
+        {
+            tbDao.create(aaStatus);
+        }
+
+        Index aaNamesIndex = new Index(Constants.ACTOR_ABILITY_STATUS_NAME_INDEX);
+        aaNamesIndex.setTable(db.name(), aaStatus.name());
+        fields = new ArrayList<>();
+        fields.add(new IndexField("name", FieldDataType.TEXT));
+        aaNamesIndex.setFields(fields);
+        if (!indexDao.exists(aaNamesIndex.getId()))
+        {
+            indexDao.create(aaNamesIndex);
         }
     }
 

@@ -37,6 +37,7 @@ public class SecNodeDaoTest extends AbstractCassandraDockerParameterizedTest
     public SecNodeDaoTest(File dockerFile) throws Exception
     {
         super(dockerFile);//call to super class to actually setup this test.
+        //^^TODO: this isn't right; we are not using Docker here
         TestDocussandraManager.getManager().ensureTestDocussandraRunning(true);
         String docussandraUrl = "http://localhost:19080/";
         config = new Config(docussandraUrl);
