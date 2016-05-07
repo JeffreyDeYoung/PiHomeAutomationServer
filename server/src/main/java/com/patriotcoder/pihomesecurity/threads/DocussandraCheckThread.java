@@ -9,8 +9,8 @@ import com.patriotcoder.pihomesecurity.dataobjects.PiHomeConfig;
 import com.patriotcoder.pihomesecurity.notifiers.Notifier;
 import com.patriotcoder.pihomesecurity.threads.abs.CheckerThread;
 import com.patriotcoder.pihomesecurity.utils.PiHomeSecUtils;
-import com.strategicgains.docussandra.domain.objects.Database;
-import com.strategicgains.docussandra.domain.objects.Table;
+import com.pearson.docussandra.domain.objects.Database;
+import com.pearson.docussandra.domain.objects.Table;
 import org.apache.log4j.Logger;
 
 /**

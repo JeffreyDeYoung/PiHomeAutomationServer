@@ -12,14 +12,12 @@ import com.patriotcoder.pihomesecurity.dataobjects.PiHomeConfig;
 import com.patriotcoder.pihomesecurity.dataobjects.SecNode;
 import com.patriotcoder.pihomesecurity.notifiers.EmailNotifier;
 import com.patriotcoder.pihomesecurity.notifiers.Notifier;
-import com.patriotcoder.pihomesecurity.threads.DocussandraCheckThread;
 import com.patriotcoder.pihomesecurity.threads.NodeCheckThread;
-import com.patriotcoder.pihomesecurity.utils.PiHomeSecUtils;
-import com.strategicgains.docussandra.domain.objects.Database;
-import com.strategicgains.docussandra.domain.objects.FieldDataType;
-import com.strategicgains.docussandra.domain.objects.Index;
-import com.strategicgains.docussandra.domain.objects.IndexField;
-import com.strategicgains.docussandra.domain.objects.Table;
+import com.pearson.docussandra.domain.objects.Database;
+import com.pearson.docussandra.domain.objects.FieldDataType;
+import com.pearson.docussandra.domain.objects.Index;
+import com.pearson.docussandra.domain.objects.IndexField;
+import com.pearson.docussandra.domain.objects.Table;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -118,20 +116,20 @@ public class Main
             notifiers[i] = new EmailNotifier(PiHomeConfig.getEmailTo()[i], "PiHomeSec", PiHomeConfig.getSmtpServer(), PiHomeConfig.getSmtpPort(), PiHomeConfig.getSmtpUser(), PiHomeConfig.getSmtpPassword());
         }
 
-        try
-        {
-            setUpDocussandra();
-        } catch (RESTException | ParseException | IOException e)
-        {
-            String errorMessage = "Problem connecting to or parsing response from Docussandra. Cannot start Pi Home Automation server application without this database access.";
-            logger.error(errorMessage, e);
-            PiHomeSecUtils.doBulkNotify(notifiers, errorMessage);
-            System.err.println(errorMessage);
-            System.exit(-1);
-        }
+//        try
+//        {
+//            setUpDocussandra();
+//        } catch (RESTException | ParseException | IOException e)
+//        {
+//            String errorMessage = "Problem connecting to or parsing response from Docussandra. Cannot start Pi Home Automation server application without this database access.";
+//            logger.error(errorMessage, e);
+//            PiHomeSecUtils.doBulkNotify(notifiers, errorMessage);
+//            System.err.println(errorMessage);
+//            System.exit(-1);
+//        }
         //keep and eye on our Docussandra connection
-        DocussandraCheckThread docDbCheckThread = new DocussandraCheckThread(PiHomeConfig.getDocussandraUrl(), notifiers);
-        docDbCheckThread.start();
+        //DocussandraCheckThread docDbCheckThread = new DocussandraCheckThread(PiHomeConfig.getDocussandraUrl(), notifiers);
+        //docDbCheckThread.start();
 
         Thread checkerThread = new NodeCheckThread(new SecNode("10.0.0.20", "First Pi"), notifiers);
         checkerThread.start();
@@ -145,10 +143,10 @@ public class Main
      * Docussandra. (Unlikely.)
      * @throws IOException If there is an IO problem connecting to Docussandra.
      */
-    private void setUpDocussandra() throws RESTException, ParseException, IOException
+    public static void setUpDocussandra(PiHomeConfig config) throws RESTException, ParseException, IOException
     {
         //set up docussandra database (if not already established)
-        Config docussandraConfig = new Config(PiHomeConfig.getDocussandraUrl());
+        Config docussandraConfig = new Config(config.getDocussandraUrl());
         DatabaseDao dbDao = new DatabaseDaoImpl(docussandraConfig);
         Database db = new Database(Constants.DB);
         db.description("This is a database for storing information related to Pi Home Automation.");
