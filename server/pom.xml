@@ -48,6 +48,26 @@
             <artifactId>DocussandraJavaSDK</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>
+        <!--needed for docussandra mocking-->
+        <dependency>
+            <groupId>org.jboss.netty</groupId>
+            <artifactId>netty</artifactId>
+            <version>3.2.10.Final</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.strategicgains.plugin-express</groupId>
+            <artifactId>SwaggerPlugin</artifactId>
+            <version>0.3.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.pearson.docussandra</groupId>
+            <artifactId>test-helpers</artifactId>
+            <version>1.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>        
+        <!-- end needed for docussandra mocking-->
         <dependency>
             <groupId>com.github.docker-java</groupId>
             <artifactId>docker-java</artifactId>

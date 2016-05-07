@@ -1,8 +1,10 @@
 package com.patriotcoder.pihomesecurity.dao;
 
 import com.docussandra.javasdk.Config;
-import com.docussandra.javasdk.testhelper.TestUtils;
+import com.docussandra.testhelpers.TestDocussandraManager;
 import com.github.cassandradockertesthelper.AbstractCassandraDockerParameterizedTest;
+import com.patriotcoder.pihomesecurity.Main;
+import com.patriotcoder.pihomesecurity.dataobjects.PiHomeConfig;
 import com.patriotcoder.pihomesecurity.dataobjects.SecNode;
 import com.patriotcoder.pihomesecurity.dataobjects.SecNodeWithId;
 import java.io.File;
@@ -32,10 +34,15 @@ public class SecNodeDaoTest extends AbstractCassandraDockerParameterizedTest
      * @param dockerFile Parameter for this test. It's the docker file that
      * represents the version of Cassandra we are testing.
      */
-    public SecNodeDaoTest(File dockerFile)
+    public SecNodeDaoTest(File dockerFile) throws Exception
     {
         super(dockerFile);//call to super class to actually setup this test.
-        config = TestUtils.establishTestServer();
+        TestDocussandraManager.getManager().ensureTestDocussandraRunning(true);
+        String docussandraUrl = "http://localhost:19080/";
+        config = new Config(docussandraUrl);
+        PiHomeConfig piConfig = new PiHomeConfig();
+        piConfig.setDocussandraUrl(docussandraUrl);
+        Main.setUpDocussandra(piConfig);
         instance = new SecNodeDao(config.getBaseUrl());
     }
 

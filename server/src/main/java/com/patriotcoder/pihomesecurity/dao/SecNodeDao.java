@@ -47,7 +47,7 @@ public class SecNodeDao
 
     public SecNodeDao(String docussandraUrl)
     {
-        Config docussandraConfig = new Config(PiHomeConfig.getDocussandraUrl());
+        Config docussandraConfig = new Config(docussandraUrl);
         this.queryDao = new QueryDaoImpl(docussandraConfig);
         this.documentDao = new DocumentDaoImpl(docussandraConfig);
         this.table = new Table();
@@ -151,15 +151,16 @@ public class SecNodeDao
     public SecNodeWithId getNodeByName(String nodeName) throws IOException, IndexParseException, ParseException, RESTException
     {
         Query q = new Query();
+        q.setDatabase(Constants.DB);
         q.setTable(Constants.NODES_TABLE);
         q.setWhere("name = '" + nodeName + "'");
         QueryResponseWrapper qrw = queryDao.query(Constants.DB, q);
-        if (!qrw.isEmpty())
+        if (qrw.isEmpty())
         {
             return null;
         } else
         {
-            ObjectReader secNodeReader = SDKUtils.getObjectMapper().reader(SecNode.class);
+            ObjectReader secNodeReader = SDKUtils.getObjectMapper().reader(SecNodeWithId.class);
             SecNodeWithId toReturn = secNodeReader.readValue(qrw.get(0).objectAsString());
             toReturn.setId(qrw.get(0).getUuid());
             return toReturn;
