@@ -1,7 +1,7 @@
 package com.patriotcoder.pihomesecurity.threads;
 
-import com.docussandra.javasdk.Config;
-import com.docussandra.javasdk.dao.impl.QueryDaoImpl;
+import com.ampliciti.db.docussandra.javasdk.Config;
+import com.ampliciti.db.docussandra.javasdk.dao.impl.QueryDaoImpl;
 import com.patriotcoder.pihomesecurity.dao.SecNodeDao;
 import com.patriotcoder.pihomesecurity.dataobjects.PiHomeConfig;
 import com.patriotcoder.pihomesecurity.notifiers.Notifier;

@@ -54,7 +54,10 @@ public class EmailNotifier implements Notifier
         // Setup mail server
         properties.setProperty("mail.smtp.host", host);
         properties.setProperty("mail.smtp.port", port + "");
+        properties.setProperty("mail.smtp.socketFactory.port", port + "");
         properties.setProperty("mail.smtp.auth", "true");
+        properties.setProperty("mail.smtp.socketFactory.class",
+				"javax.net.ssl.SSLSocketFactory");
         //properties.setProperty("mail.smtp.tls.enable", "true");
         properties.setProperty("mail.smtp.starttls.enable", "true");
         properties.setProperty("mail.debug.auth", "true");

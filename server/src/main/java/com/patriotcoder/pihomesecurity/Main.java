@@ -1,18 +1,20 @@
 package com.patriotcoder.pihomesecurity;
 
-import com.docussandra.javasdk.Config;
-import com.docussandra.javasdk.dao.DatabaseDao;
-import com.docussandra.javasdk.dao.IndexDao;
-import com.docussandra.javasdk.dao.TableDao;
-import com.docussandra.javasdk.dao.impl.DatabaseDaoImpl;
-import com.docussandra.javasdk.dao.impl.IndexDaoImpl;
-import com.docussandra.javasdk.dao.impl.TableDaoImpl;
-import com.docussandra.javasdk.exceptions.RESTException;
+import com.ampliciti.db.docussandra.javasdk.Config;
+import com.ampliciti.db.docussandra.javasdk.dao.DatabaseDao;
+import com.ampliciti.db.docussandra.javasdk.dao.IndexDao;
+import com.ampliciti.db.docussandra.javasdk.dao.TableDao;
+import com.ampliciti.db.docussandra.javasdk.dao.impl.DatabaseDaoImpl;
+import com.ampliciti.db.docussandra.javasdk.dao.impl.IndexDaoImpl;
+import com.ampliciti.db.docussandra.javasdk.dao.impl.TableDaoImpl;
+import com.ampliciti.db.docussandra.javasdk.exceptions.RESTException;
 import com.patriotcoder.pihomesecurity.dataobjects.PiHomeConfig;
 import com.patriotcoder.pihomesecurity.dataobjects.SecNode;
 import com.patriotcoder.pihomesecurity.notifiers.EmailNotifier;
 import com.patriotcoder.pihomesecurity.notifiers.Notifier;
+import com.patriotcoder.pihomesecurity.threads.DocussandraCheckThread;
 import com.patriotcoder.pihomesecurity.threads.NodeCheckThread;
+import com.patriotcoder.pihomesecurity.utils.PiHomeSecUtils;
 import com.pearson.docussandra.domain.objects.Database;
 import com.pearson.docussandra.domain.objects.FieldDataType;
 import com.pearson.docussandra.domain.objects.Index;
@@ -99,7 +101,7 @@ public class Main
      */
     public void run()
     {
-        PiHomeConfig config;
+        PiHomeConfig config = null;
         try
         {
             config = generateConfig(propertiesFile);
@@ -116,20 +118,21 @@ public class Main
             notifiers[i] = new EmailNotifier(PiHomeConfig.getEmailTo()[i], "PiHomeSec", PiHomeConfig.getSmtpServer(), PiHomeConfig.getSmtpPort(), PiHomeConfig.getSmtpUser(), PiHomeConfig.getSmtpPassword());
         }
 
-//        try
-//        {
-//            setUpDocussandra();
-//        } catch (RESTException | ParseException | IOException e)
-//        {
-//            String errorMessage = "Problem connecting to or parsing response from Docussandra. Cannot start Pi Home Automation server application without this database access.";
-//            logger.error(errorMessage, e);
-//            PiHomeSecUtils.doBulkNotify(notifiers, errorMessage);
-//            System.err.println(errorMessage);
-//            System.exit(-1);
-//        }
-        //keep and eye on our Docussandra connection
-        //DocussandraCheckThread docDbCheckThread = new DocussandraCheckThread(PiHomeConfig.getDocussandraUrl(), notifiers);
-        //docDbCheckThread.start();
+        try
+        {
+            setUpDocussandra(config);
+        } catch (RESTException | ParseException | IOException e)
+        {
+            String errorMessage = "Problem connecting to or parsing response from Docussandra. Cannot start Pi Home Automation server application without this database access.";
+            logger.error(errorMessage, e);
+            PiHomeSecUtils.doBulkNotify(notifiers, errorMessage);
+            System.err.println(errorMessage);
+            System.exit(-1);
+        }
+        //keep an eye on our Docussandra connection
+        DocussandraCheckThread docDbCheckThread = new DocussandraCheckThread(PiHomeConfig.getDocussandraUrl(), notifiers);
+        docDbCheckThread.start();
+        //keep an eye on our pi until it starts to self-register
         Thread checkerThread = new NodeCheckThread(new SecNode("10.0.0.20", "First Pi"), notifiers);
         checkerThread.start();
     }
@@ -148,23 +151,23 @@ public class Main
         Config docussandraConfig = new Config(config.getDocussandraUrl());
         DatabaseDao dbDao = new DatabaseDaoImpl(docussandraConfig);
         Database db = new Database(Constants.DB);
-        db.description("This is a database for storing information related to Pi Home Automation.");
+        db.setDescription("This is a database for storing information related to Pi Home Automation.");
         if (!dbDao.exists(db.getId()))
         {
             dbDao.create(db);
         }
         TableDao tbDao = new TableDaoImpl(docussandraConfig);
         Table nodesTable = new Table();
-        nodesTable.database(db);
-        nodesTable.name(Constants.NODES_TABLE);
-        nodesTable.description("This table holds information about all of our nodes for the Pi Home Automation Application.");
+        nodesTable.setDatabaseByObject(db);
+        nodesTable.setName(Constants.NODES_TABLE);
+        nodesTable.setDescription("This table holds information about all of our nodes for the Pi Home Automation Application.");
         if (!tbDao.exists(nodesTable.getId()))
         {
             tbDao.create(nodesTable);
         }
 
         Index namesIndex = new Index(Constants.NODES_TABLE_NAME_INDEX);
-        namesIndex.setTable(db.name(), nodesTable.name());
+        namesIndex.setTable(db.getName(), nodesTable.getName());
         List<IndexField> fields = new ArrayList<>();
         fields.add(new IndexField("name", FieldDataType.TEXT));
         namesIndex.setFields(fields);
@@ -175,7 +178,7 @@ public class Main
         }
 
         Index runningIndex = new Index(Constants.NODES_TABLE_RUNNING_INDEX);
-        runningIndex.setTable(db.name(), nodesTable.name());
+        runningIndex.setTable(db.getName(), nodesTable.getName());
         List<IndexField> fieldsRunning = new ArrayList<>();
         fieldsRunning.add(new IndexField("running", FieldDataType.BOOLEAN));
         runningIndex.setFields(fieldsRunning);
@@ -185,7 +188,7 @@ public class Main
         }
 
         Index typeIndex = new Index(Constants.NODE_TYPE_INDEX);
-        typeIndex.setTable(db.name(), nodesTable.name());
+        typeIndex.setTable(db.getName(), nodesTable.getName());
         List<IndexField> fieldsType = new ArrayList<>();
         fieldsType.add(new IndexField("running", FieldDataType.BOOLEAN));
         fieldsType.add(new IndexField("type", FieldDataType.TEXT));
@@ -196,16 +199,16 @@ public class Main
         }
 
         Table aaStatus = new Table();
-        aaStatus.database(db);
-        aaStatus.name(Constants.ACTOR_ABILITY_STATUS_TABLE);
-        aaStatus.description("This table holds information about all of our actor abilities current status.");
+        aaStatus.setDatabaseByObject(db);
+        aaStatus.setName(Constants.ACTOR_ABILITY_STATUS_TABLE);
+        aaStatus.setDescription("This table holds information about all of our actor abilities current status.");
         if (!tbDao.exists(aaStatus.getId()))
         {
             tbDao.create(aaStatus);
         }
 
         Index aaNamesIndex = new Index(Constants.ACTOR_ABILITY_STATUS_NAME_INDEX);
-        aaNamesIndex.setTable(db.name(), aaStatus.name());
+        aaNamesIndex.setTable(db.getName(), aaStatus.getName());
         fields = new ArrayList<>();
         fields.add(new IndexField("name", FieldDataType.TEXT));
         aaNamesIndex.setFields(fields);

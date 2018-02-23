@@ -1,12 +1,12 @@
 package com.patriotcoder.pihomesecurity.dao;
 
-import com.docussandra.javasdk.Config;
-import com.docussandra.javasdk.SDKUtils;
-import com.docussandra.javasdk.dao.DocumentDao;
-import com.docussandra.javasdk.dao.QueryDao;
-import com.docussandra.javasdk.dao.impl.DocumentDaoImpl;
-import com.docussandra.javasdk.dao.impl.QueryDaoImpl;
-import com.docussandra.javasdk.exceptions.RESTException;
+import com.ampliciti.db.docussandra.javasdk.Config;
+import com.ampliciti.db.docussandra.javasdk.SDKUtils;
+import com.ampliciti.db.docussandra.javasdk.dao.DocumentDao;
+import com.ampliciti.db.docussandra.javasdk.dao.QueryDao;
+import com.ampliciti.db.docussandra.javasdk.dao.impl.DocumentDaoImpl;
+import com.ampliciti.db.docussandra.javasdk.dao.impl.QueryDaoImpl;
+import com.ampliciti.db.docussandra.javasdk.exceptions.RESTException;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.patriotcoder.pihomesecurity.Constants;
 import com.patriotcoder.pihomesecurity.dataobjects.PiHomeConfig;
@@ -51,8 +51,8 @@ public class SecNodeDao
         this.queryDao = new QueryDaoImpl(docussandraConfig);
         this.documentDao = new DocumentDaoImpl(docussandraConfig);
         this.table = new Table();
-        this.table.database(Constants.DB);
-        this.table.name(Constants.NODES_TABLE);
+        this.table.setDatabaseByString(Constants.DB);
+        this.table.setName(Constants.NODES_TABLE);
     }
 
     /**
@@ -67,16 +67,17 @@ public class SecNodeDao
     public List<SecNode> getRunningNodes() throws IOException, IndexParseException, ParseException, RESTException
     {
         Query q = new Query();
-        q.setTable(table.name());
+        q.setDatabase(Constants.DB);
+        q.setTable(table.getName());
         q.setWhere("running = 'True'");
-        QueryResponseWrapper qrw = queryDao.query(Constants.DB, q);
+        QueryResponseWrapper qrw = queryDao.query(q);
         if (!qrw.isEmpty())
         {
             ObjectReader secNodeReader = SDKUtils.getObjectMapper().reader(SecNode.class);
             List<SecNode> runningNodes = new ArrayList<>(qrw.size());
             for (Document d : qrw)
             {
-                runningNodes.add(secNodeReader.readValue(d.objectAsString()));
+                runningNodes.add(secNodeReader.readValue(d.getObjectAsString()));
             }
             return runningNodes;
         }
@@ -95,16 +96,17 @@ public class SecNodeDao
     public List<SecNode> getStoppedNodes() throws IOException, IndexParseException, ParseException, RESTException
     {
         Query q = new Query();
-        q.setTable(table.name());
+        q.setDatabase(Constants.DB);
+        q.setTable(table.getName());
         q.setWhere("running = 'False'");
-        QueryResponseWrapper qrw = queryDao.query(Constants.DB, q);
+        QueryResponseWrapper qrw = queryDao.query(q);
         if (!qrw.isEmpty())
         {
             ObjectReader secNodeReader = SDKUtils.getObjectMapper().reader(SecNode.class);
             List<SecNode> stoppedNodes = new ArrayList<>(qrw.size());
             for (Document d : qrw)
             {
-                stoppedNodes.add(secNodeReader.readValue(d.objectAsString()));
+                stoppedNodes.add(secNodeReader.readValue(d.getObjectAsString()));
             }
             return stoppedNodes;
         }
@@ -136,7 +138,7 @@ public class SecNodeDao
     private void updateNode(SecNodeWithId node) throws IOException, ParseException, RESTException
     {
         Document doc = new Document();
-        doc.objectAsString(SDKUtils.createJSON(node));
+        doc.setObjectAsString(SDKUtils.createJSON(node));
         doc.setUuid(node.getId());
         documentDao.update(doc);
     }
@@ -144,7 +146,7 @@ public class SecNodeDao
     private void createNode(SecNode node) throws IOException, ParseException, RESTException
     {
         Document doc = new Document();
-        doc.objectAsString(SDKUtils.createJSON(node));
+        doc.setObjectAsString(SDKUtils.createJSON(node));
         documentDao.create(table, doc);
     }
 
@@ -153,15 +155,16 @@ public class SecNodeDao
         Query q = new Query();
         q.setDatabase(Constants.DB);
         q.setTable(Constants.NODES_TABLE);
+        q.setDatabase(Constants.DB);
         q.setWhere("name = '" + nodeName + "'");
-        QueryResponseWrapper qrw = queryDao.query(Constants.DB, q);
+        QueryResponseWrapper qrw = queryDao.query(q);
         if (qrw.isEmpty())
         {
             return null;
         } else
         {
             ObjectReader secNodeReader = SDKUtils.getObjectMapper().reader(SecNodeWithId.class);
-            SecNodeWithId toReturn = secNodeReader.readValue(qrw.get(0).objectAsString());
+            SecNodeWithId toReturn = secNodeReader.readValue(qrw.get(0).getObjectAsString());
             toReturn.setId(qrw.get(0).getUuid());
             return toReturn;
         }

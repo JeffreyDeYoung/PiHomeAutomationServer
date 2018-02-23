@@ -1,6 +1,6 @@
 package com.patriotcoder.pihomesecurity.dao;
 
-import com.docussandra.javasdk.Config;
+import com.ampliciti.db.docussandra.javasdk.Config;
 import com.docussandra.testhelpers.TestDocussandraManager;
 import com.github.cassandradockertesthelper.AbstractCassandraDockerParameterizedTest;
 import com.patriotcoder.pihomesecurity.Main;

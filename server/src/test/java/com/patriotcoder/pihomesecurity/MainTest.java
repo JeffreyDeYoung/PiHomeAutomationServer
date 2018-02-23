@@ -1,12 +1,12 @@
 package com.patriotcoder.pihomesecurity;
 
-import com.docussandra.javasdk.Config;
-import com.docussandra.javasdk.dao.DatabaseDao;
-import com.docussandra.javasdk.dao.IndexDao;
-import com.docussandra.javasdk.dao.TableDao;
-import com.docussandra.javasdk.dao.impl.DatabaseDaoImpl;
-import com.docussandra.javasdk.dao.impl.IndexDaoImpl;
-import com.docussandra.javasdk.dao.impl.TableDaoImpl;
+import com.ampliciti.db.docussandra.javasdk.Config;
+import com.ampliciti.db.docussandra.javasdk.dao.DatabaseDao;
+import com.ampliciti.db.docussandra.javasdk.dao.IndexDao;
+import com.ampliciti.db.docussandra.javasdk.dao.TableDao;
+import com.ampliciti.db.docussandra.javasdk.dao.impl.DatabaseDaoImpl;
+import com.ampliciti.db.docussandra.javasdk.dao.impl.IndexDaoImpl;
+import com.ampliciti.db.docussandra.javasdk.dao.impl.TableDaoImpl;
 import com.docussandra.testhelpers.TestDocussandraManager;
 import com.patriotcoder.pihomesecurity.dataobjects.PiHomeConfig;
 import com.pearson.docussandra.domain.objects.Identifier;

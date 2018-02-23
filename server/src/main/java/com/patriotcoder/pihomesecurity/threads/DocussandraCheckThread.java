@@ -1,9 +1,9 @@
 package com.patriotcoder.pihomesecurity.threads;
 
-import com.docussandra.javasdk.Config;
-import com.docussandra.javasdk.dao.TableDao;
-import com.docussandra.javasdk.dao.impl.TableDaoImpl;
-import com.docussandra.javasdk.exceptions.RESTException;
+import com.ampliciti.db.docussandra.javasdk.Config;
+import com.ampliciti.db.docussandra.javasdk.dao.TableDao;
+import com.ampliciti.db.docussandra.javasdk.dao.impl.TableDaoImpl;
+import com.ampliciti.db.docussandra.javasdk.exceptions.RESTException;
 import com.patriotcoder.pihomesecurity.Constants;
 import com.patriotcoder.pihomesecurity.dataobjects.PiHomeConfig;
 import com.patriotcoder.pihomesecurity.notifiers.Notifier;
@@ -61,8 +61,8 @@ public class DocussandraCheckThread extends CheckerThread
     public boolean runCheck()
     {
         Table t = new Table();
-        t.database(new Database(Constants.DB));
-        t.name(Constants.NODES_TABLE);
+        t.setDatabaseByString(Constants.DB);
+        t.setName(Constants.NODES_TABLE);
         try
         {
             return tableDao.exists(t.getId());//we can connect and the table exists or doesn't
