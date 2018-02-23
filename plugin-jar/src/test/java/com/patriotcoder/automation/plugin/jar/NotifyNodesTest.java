@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this license header, choose License Headers in Project Properties. To change this
+ * template file, choose Tools | Templates and open the template in the editor.
  */
 package com.patriotcoder.automation.plugin.jar;
 
@@ -26,71 +25,59 @@ import static org.junit.Assert.*;
  *
  * @author Jeffrey DeYoung
  */
-public class NotifyNodesTest
-{
+public class NotifyNodesTest {
 
-    public NotifyNodesTest()
-    {
-    }
+  public NotifyNodesTest() {}
 
-    @BeforeClass
-    public static void setUpClass()
-    {
-    }
+  @BeforeClass
+  public static void setUpClass() {}
 
-    @AfterClass
-    public static void tearDownClass()
-    {
-    }
+  @AfterClass
+  public static void tearDownClass() {}
 
-    @Before
-    public void setUp()
-    {
-    }
+  @Before
+  public void setUp() {}
 
-    @After
-    public void tearDown()
-    {
-    }
+  @After
+  public void tearDown() {}
 
-    /**
-     * Test of doNotify method, of class NotifyNodes.
-     */
-    @Test
-    public void testDoNotify() throws Exception
-    {
-        System.out.println("doNotify");
-        String docussandraUrl = "http://localhost:19080/";
+  /**
+   * Test of doNotify method, of class NotifyNodes.
+   */
+  @Test
+  public void testDoNotify() throws Exception {
+    System.out.println("doNotify");
+    String docussandraUrl = "http://localhost:19080/";
 
-        TestDocussandraManager.getManager().ensureTestDocussandraRunning(true);
-        PiHomeConfig serverConfig = new PiHomeConfig();
-        serverConfig.setDocussandraUrl(docussandraUrl);
-        Main.setUpDocussandra(serverConfig);
-        //end server setup
-        
-        //datasetup
-        InitUtils.selfRegister(new PiActorConfig("BarnActor", "Barn", docussandraUrl, new ArrayList<ActorAbility>()));
-        
-        //call
-        NotifierPlugin.MutateType type = NotifierPlugin.MutateType.CREATE;
-        Document document = new Document();
-        document.setTable(Constants.DB, Constants.ACTOR_ABILITY_STATUS_TABLE);
-        document.setObjectAsString("{\"name\":\"BarnActor_MainAir\", \"state\":\"OFF\"}");
-        NotifyNodes instance = new NotifyNodes();
-        instance.doNotify(type, document);
-    }
+    TestDocussandraManager.getManager().ensureTestDocussandraRunning(true);
+    PiHomeConfig serverConfig = new PiHomeConfig();
+    serverConfig.setDocussandraUrl(docussandraUrl);
+    Main.setUpDocussandra(serverConfig);
+    // end server setup
 
-    /**
-     * Test of getPluginName method, of class NotifyNodes.
-     */
-    @Test
-    public void testGetPluginName()
-    {
-        System.out.println("getPluginName");
-        NotifyNodes instance = new NotifyNodes();
-        String expResult = "Node-Notifier";
-        String result = instance.getPluginName();
-        assertEquals(expResult, result);
-    }
+    // datasetup
+    InitUtils.selfRegister(
+        new PiActorConfig("BarnActor", "Barn", docussandraUrl, new ArrayList<ActorAbility>()));
+
+    // call
+    NotifierPlugin.MutateType type = NotifierPlugin.MutateType.CREATE;
+    Document document = new Document();
+    document.setTable(Constants.DB, Constants.ACTOR_ABILITY_STATUS_TABLE);
+    document.setObjectAsString("{\"name\":\"BarnActor_MainAir\", \"state\":\"OFF\"}");
+    NotifyNodes instance = new NotifyNodes();
+    instance.doNotify(type, document);
+  }
+
+  /**
+   * Test of getPluginName method, of class NotifyNodes.
+   */
+  @Test
+  public void testGetPluginName() {
+    System.out.println("getPluginName");
+    NotifyNodes instance = new NotifyNodes();
+    String expResult = "Node-Notifier";
+    String result = instance.getPluginName();
+    assertEquals(expResult, result);
+  }
 
 }
