@@ -34,16 +34,17 @@ public class EmailNotifier implements Notifier {
 
   /**
    * Constructor.
-   * 
+   *
    * @param to Who to send the email to.
-   * @param from Who the email should appear to be sent from (human readable; not an address).
+   * @param from Who the email should appear to be sent from (human readable;
+   * not an address).
    * @param host SMTP host for the email.
    * @param port SMTP port for the email.
    * @param username SMTP username for the email.
    * @param password SMTP password for the email.
    */
   public EmailNotifier(String to, String from, String host, int port, String username,
-      String password) {
+          String password) {
     this.to = to;
     this.from = from;
     this.host = host;
@@ -52,14 +53,12 @@ public class EmailNotifier implements Notifier {
     // Get system properties
     properties = System.getProperties();
     // Setup mail server
-    properties.setProperty("mail.smtp.host", host);
-    properties.setProperty("mail.smtp.port", port + "");
-    properties.setProperty("mail.smtp.socketFactory.port", port + "");
-    properties.setProperty("mail.smtp.auth", "true");
-    properties.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-    // properties.setProperty("mail.smtp.tls.enable", "true");
-    properties.setProperty("mail.smtp.starttls.enable", "true");
-    properties.setProperty("mail.debug.auth", "true");
+    properties.put("mail.smtp.host", "smtp.gmail.com");
+    properties.put("mail.smtp.socketFactory.port", "465");
+    properties.put("mail.smtp.socketFactory.class",
+            "javax.net.ssl.SSLSocketFactory");
+    properties.put("mail.smtp.auth", "true");
+    properties.put("mail.smtp.port", "465");
   }
 
   /**
