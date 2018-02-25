@@ -26,7 +26,7 @@ def main():
 	print "State is: " + str(switch_one_state)
 	print "Fire watcher started successfully."
 	sys.stdout.flush()
-	GPIO.add_event_detect(channel, GPIO.BOTH, callback=stateChange, bouncetime=50)
+	GPIO.add_event_detect(channel, GPIO.BOTH, callback=stateChange, bouncetime=250)
 	while True:
 		time.sleep(1)
 
