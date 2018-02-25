@@ -2,6 +2,7 @@
 nbactions.xml
 /config
 *~
-/server/config
+server/config/*
 /server/target/
 plugin-jar/target/
+server/config/pi-sec.properties

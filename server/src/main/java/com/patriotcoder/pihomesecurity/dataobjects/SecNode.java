@@ -6,65 +6,65 @@ package com.patriotcoder.pihomesecurity.dataobjects;
  * @author https://github.com/JeffreyDeYoung
  */
 public class SecNode {
-   
-    /**
-     * Ip of the Pi (or other microcomputer).
-     */
-    private String ip;
-    
-    /**
-     * Name (or function) of this pi (or other microcomputer).
-     */
-    private String name;
 
-    /**
-     * Default constructor.
-     */
-    public SecNode() {
-    }
+  /**
+   * Ip of the Pi (or other microcomputer).
+   */
+  private String ip;
 
-    /**
-     * Constructor.
-     * @param ip Node ip (or DNS).
-     * @param name Name of this node.
-     */
-    public SecNode(String ip, String name) {
-        this.ip = ip;
-        this.name = name;
-    }
+  /**
+   * Name (or function) of this pi (or other microcomputer).
+   */
+  private String name;
 
-    /**
-     * @return the ip
-     */
-    public String getIp() {
-        return ip;
-    }
+  /**
+   * Default constructor.
+   */
+  public SecNode() {}
 
-    /**
-     * @param ip the ip to set
-     */
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
+  /**
+   * Constructor.
+   * 
+   * @param ip Node ip (or DNS).
+   * @param name Name of this node.
+   */
+  public SecNode(String ip, String name) {
+    this.ip = ip;
+    this.name = name;
+  }
 
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * @return the ip
+   */
+  public String getIp() {
+    return ip;
+  }
 
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+  /**
+   * @param ip the ip to set
+   */
+  public void setIp(String ip) {
+    this.ip = ip;
+  }
 
-    @Override
-    public String toString() {
-        return "SecNode{" + "ip=" + ip + ", name=" + name + '}';
-    }
+  /**
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-    
+  /**
+   * @param name the name to set
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return "SecNode{" + "ip=" + ip + ", name=" + name + '}';
+  }
+
+
 }
